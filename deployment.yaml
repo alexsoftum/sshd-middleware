@@ -1,0 +1,37 @@
+kind: Deployment
+metadata:
+  name: middleware-sshd
+  labels:
+    app: middleware-sshd
+spec:
+  selector:
+    matchLabels:
+      app: middleware-sshd
+  template:
+    metadata:
+      labels:
+        app: middleware-sshd
+    spec:
+      containers:
+        - name: middleware-sshd
+          image: middleware-sshd:latest
+          imagePullPolicy: Always
+          env:
+            - name: SSH_X11_FORWARDING
+              value: "yes"
+            - name: SSH_GATEWAY_PORTS
+              value: "yes"
+            - name: SSH_PUBKEY_AUTHENTICATION
+              value: "yes"
+            - name: SSH_PASSWORD_AUTHENTICATION
+              value: "no"
+            - name: SSH_PERMIT_EMPTY_PASSWORDS
+              value: "no"
+            - name: SSH_PERMIT_ROOT_LOGIN
+              value: "no"
+            - name: SSH_PERMIT_OPEN
+              value: "mariadb:3306"
+            - name: SSH_ALLOW_FROM_IP
+              value: "127.0.0.1"
+      imagePullSecrets:
+        - name: gitlab-creditails
